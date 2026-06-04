@@ -3,7 +3,7 @@ generator client {
 }
 
 datasource db {
-  provider = "sqlite"
+  provider = "postgresql"
   url      = env("DATABASE_URL")
 }
 
@@ -17,25 +17,25 @@ model User {
 }
 
 model RomanticPage {
-  id            String    @id @default(cuid())
-  creatorName   String
-  partnerName   String
-  coupleName    String
-  startDate     DateTime
-  message       String
-  photos        String
+  id              String    @id @default(cuid())
+  creatorName     String
+  partnerName     String
+  coupleName      String
+  startDate       DateTime
+  message         String
+  photos          String
   musicUrl        String?
   musicStartTime  Int       @default(0)
   theme           String    @default("classic")
-  slug          String    @unique
-  plan          String    @default("FREE")
-  isPremium     Boolean   @default(false)
-  paymentStatus String    @default("PENDING")
-  userId        String?
-  user          User?     @relation(fields: [userId], references: [id])
-  payments      Payment[]
-  createdAt     DateTime  @default(now())
-  updatedAt     DateTime  @updatedAt
+  slug            String    @unique
+  plan            String    @default("FREE")
+  isPremium       Boolean   @default(false)
+  paymentStatus   String    @default("PENDING")
+  userId          String?
+  user            User?     @relation(fields: [userId], references: [id])
+  payments        Payment[]
+  createdAt       DateTime  @default(now())
+  updatedAt       DateTime  @updatedAt
 }
 
 model Payment {
