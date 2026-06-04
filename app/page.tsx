@@ -1,6 +1,7 @@
 import { PrimaryButton, SectionTitle } from "@/components/ui";
 import { HeartBackground } from "@/components/heart-background";
 import { MouseReactiveParticles } from "@/components/mouse-reactive-particles";
+import { DemoModalButton } from "@/components/demo-modal-button";
 
 const steps = [
   "Personalize sua página",
@@ -70,12 +71,7 @@ export default function HomePage() {
             <PrimaryButton href="/criar" className="px-12 py-5 text-2xl shadow-[0_0_48px_rgba(255,79,135,0.7)]">
               Criar minha surpresa
             </PrimaryButton>
-            <a
-              href="/demo"
-              className="inline-flex items-center justify-center rounded-full border border-white/40 bg-white/15 px-10 py-5 text-xl font-semibold text-white backdrop-blur-md transition hover:scale-[1.02] hover:bg-white/25"
-            >
-              Ver demonstração
-            </a>
+            <DemoModalButton />
             <a
               href="#planos"
               className="inline-flex items-center justify-center rounded-full border border-white/35 bg-white/10 px-11 py-4 text-xl font-semibold text-white transition hover:bg-white/20"
