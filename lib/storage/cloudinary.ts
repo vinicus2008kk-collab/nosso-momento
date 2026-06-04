@@ -20,7 +20,9 @@ export const cloudinaryImageStorage: ImageStorageAdapter = {
     const folder = process.env.CLOUDINARY_FOLDER ?? "nosso-momento";
 
     const formData = new FormData();
-    formData.append("file", new Blob([buffer], { type: contentType }), filename);
+    const fileBytes = new Uint8Array(buffer);
+
+    formData.append("file", new Blob([fileBytes], { type: contentType }), filename);
 
     if (uploadPreset) {
       formData.append("upload_preset", uploadPreset);
@@ -43,7 +45,7 @@ export const cloudinaryImageStorage: ImageStorageAdapter = {
       `https://api.cloudinary.com/v1_1/${cloudName}/${resourceType}/upload`,
       {
         method: "POST",
-        body: formData
+        body: formData,
       }
     );
 
@@ -57,5 +59,5 @@ export const cloudinaryImageStorage: ImageStorageAdapter = {
     }
 
     return data.secure_url;
-  }
+  },
 };
