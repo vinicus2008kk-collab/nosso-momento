@@ -16,22 +16,26 @@ function getSupabaseConfig() {
 export const supabaseImageStorage: ImageStorageAdapter = {
   async upload({ buffer, filename, contentType }: UploadImageInput) {
     const { url, serviceRoleKey, bucket } = getSupabaseConfig();
+
     const objectPath = `romantic-pages/${randomUUID()}-${filename.replace(/\s+/g, "-")}`;
 
-    const response = await fetch(`${url}/storage/v1/object/${bucket}/${objectPath}`, {
-      method: "POST",
-      headers: {
-        Authorization: `Bearer ${serviceRoleKey}`,
-        "Content-Type": contentType,
-        "x-upsert": "false"
-      },
-      body: buffer
-    });
+    const response = await fetch(
+      `${url}/storage/v1/object/${bucket}/${objectPath}`,
+      {
+        method: "POST",
+        headers: {
+          Authorization: `Bearer ${serviceRoleKey}`,
+          "Content-Type": contentType,
+          "x-upsert": "false",
+        },
+        body: new Uint8Array(buffer),
+      }
+    );
 
     if (!response.ok) {
       throw new Error("Falha ao enviar imagem para o Supabase Storage.");
     }
 
     return `${url}/storage/v1/object/public/${bucket}/${objectPath}`;
-  }
+  },
 };
