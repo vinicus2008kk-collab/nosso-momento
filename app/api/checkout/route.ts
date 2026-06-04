@@ -3,6 +3,8 @@ import { prisma } from "@/lib/prisma";
 import { buildPublicUrl } from "@/lib/utils";
 import { NextResponse } from "next/server";
 
+export const dynamic = "force-dynamic";
+
 const PREMIUM_PRICE = 19.9;
 
 export async function POST(request: Request) {
