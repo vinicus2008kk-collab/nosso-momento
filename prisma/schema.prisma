@@ -1,0 +1,50 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "sqlite"
+  url      = env("DATABASE_URL")
+}
+
+model User {
+  id        String         @id @default(cuid())
+  name      String?
+  email     String?        @unique
+  pages     RomanticPage[]
+  createdAt DateTime       @default(now())
+  updatedAt DateTime       @updatedAt
+}
+
+model RomanticPage {
+  id            String    @id @default(cuid())
+  creatorName   String
+  partnerName   String
+  coupleName    String
+  startDate     DateTime
+  message       String
+  photos        String
+  musicUrl        String?
+  musicStartTime  Int       @default(0)
+  theme           String    @default("classic")
+  slug          String    @unique
+  plan          String    @default("FREE")
+  isPremium     Boolean   @default(false)
+  paymentStatus String    @default("PENDING")
+  userId        String?
+  user          User?     @relation(fields: [userId], references: [id])
+  payments      Payment[]
+  createdAt     DateTime  @default(now())
+  updatedAt     DateTime  @updatedAt
+}
+
+model Payment {
+  id                   String       @id @default(cuid())
+  romanticPageId       String
+  romanticPage         RomanticPage @relation(fields: [romanticPageId], references: [id], onDelete: Cascade)
+  mercadoPagoPaymentId String?      @unique
+  status               String       @default("PENDING")
+  amount               Float
+  createdAt            DateTime     @default(now())
+  updatedAt            DateTime     @updatedAt
+}
