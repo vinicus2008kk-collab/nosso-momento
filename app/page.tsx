@@ -388,7 +388,7 @@ export default function HomePage() {
             Quero Presentear Agora ♡
           </PrimaryButton>
           <div className="mt-6 flex flex-wrap justify-center gap-6 text-sm" style={{ color: "rgba(255,235,215,0.5)" }}>
-            <span>♥ Gratuito para começar</span>
+            <span>♥ Fácil de criar</span>
             <span>♥ Pronto em minutos</span>
             <span>♥ Link exclusivo do casal</span>
           </div>
