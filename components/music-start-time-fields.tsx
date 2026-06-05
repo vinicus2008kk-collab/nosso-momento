@@ -25,11 +25,11 @@ export function MusicStartTimeFields({
 
   return (
     <div className="space-y-3">
-      <p className="text-sm font-medium text-cream/90">Início da música</p>
+      <p className="text-sm font-medium" style={{ color: "#1e0d0d" }}>Início da música</p>
 
       <div className="grid grid-cols-2 gap-3">
         <label className="block">
-          <span className="mb-1 block text-center text-xs text-cream/70">Minutos</span>
+          <span className="mb-1 block text-center text-xs" style={{ color: "#6b4040" }}>Minutos</span>
           <div className="relative">
             <span className="input-icon">⏱️</span>
             <input
@@ -46,7 +46,7 @@ export function MusicStartTimeFields({
         </label>
 
         <label className="block">
-          <span className="mb-1 block text-center text-xs text-cream/70">Segundos</span>
+          <span className="mb-1 block text-center text-xs" style={{ color: "#6b4040" }}>Segundos</span>
           <div className="relative">
             <span className="input-icon">⏱️</span>
             <input
@@ -63,10 +63,10 @@ export function MusicStartTimeFields({
         </label>
       </div>
 
-      <p className="rounded-xl border border-[#d4af37]/25 bg-[#d4af37]/10 px-3 py-2 text-center text-sm text-cream/95">
+      <p className="rounded-xl px-3 py-2 text-center text-sm" style={{ border: "1px solid rgba(139,26,42,0.15)", background: "rgba(139,26,42,0.05)", color: "#4a2a2a" }}>
         {hasStart ? (
           <>
-            A música iniciará em <strong className="text-white">{formattedTime}</strong>
+            A música iniciará em <strong style={{ color: "#1e0d0d" }}>{formattedTime}</strong>
           </>
         ) : (
           <>A música iniciará do começo</>

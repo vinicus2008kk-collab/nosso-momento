@@ -57,7 +57,7 @@ export const romanticPageSchema = z
       ctx.addIssue({
         code: z.ZodIssueCode.custom,
         path: ["photos"],
-        message: `Plano grátis permite apenas ${MAX_PHOTOS_FREE} mídia.`
+        message: `Clássico permite apenas ${MAX_PHOTOS_FREE} mídia.`
       });
     }
   });

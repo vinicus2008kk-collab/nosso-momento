@@ -34,9 +34,9 @@ body {
 }
 
 .romantic-card:hover {
-  transform: translateY(-5px) scale(1.01);
-  border-color: rgba(212, 175, 55, 0.45);
-  box-shadow: 0 30px 64px rgba(2, 1, 8, 0.55);
+  transform: translateY(-4px) scale(1.01);
+  border-color: rgba(139, 26, 42, 0.25);
+  box-shadow: 0 16px 48px rgba(139, 26, 42, 0.14);
 }
 
 .romantic-glow {
@@ -75,11 +75,11 @@ body {
   position: relative;
   border-radius: 2.8rem;
   padding-top: 1.8rem;
-  border: 1px solid rgba(255, 255, 255, 0.26);
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.16), rgba(255, 255, 255, 0.04));
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.14), rgba(255, 255, 255, 0.04));
   box-shadow:
-    0 35px 90px rgba(3, 2, 8, 0.72),
-    0 0 90px rgba(115, 68, 180, 0.17);
+    0 35px 90px rgba(20, 5, 10, 0.55),
+    0 0 60px rgba(139, 26, 42, 0.12);
 }
 
 .iphone-screen {
@@ -124,10 +124,10 @@ body {
   position: absolute;
   width: 14px;
   height: 14px;
-  background: #b678d8;
+  background: #8b1a2a;
   transform: rotate(45deg) scale(0.95);
   border-radius: 2px;
-  filter: drop-shadow(0 0 8px rgba(182, 120, 216, 0.45));
+  filter: drop-shadow(0 0 8px rgba(139, 26, 42, 0.35));
 }
 
 .heart::before,
@@ -196,6 +196,11 @@ body {
 
 .input-with-icon {
   padding-left: 2.45rem;
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50% { transform: translateY(-12px); }
 }
 
 @keyframes particle-float {

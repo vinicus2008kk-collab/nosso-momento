@@ -12,17 +12,19 @@ import { useRouter } from "next/navigation";
 type Plan = "FREE" | "PREMIUM";
 
 const themePreviewConfig: Record<string, string> = {
-  classic: "from-[#190a21] via-[#2d1b4e] to-[#0d0b14]",
-  wine:    "from-[#22020c] via-[#5a0f2b] to-[#120008]",
-  rose:    "from-[#ffb6d5] via-[#ff7eb6] to-[#7b2049]",
-  night:   "from-[#030712] via-[#1e1b4b] to-[#000000]",
+  classic:    "from-[#190a21] via-[#2d1b4e] to-[#0d0b14]",
+  wine:       "from-[#22020c] via-[#5a0f2b] to-[#120008]",
+  rose:       "from-[#ffb6d5] via-[#ff7eb6] to-[#7b2049]",
+  night:      "from-[#030712] via-[#1e1b4b] to-[#000000]",
+  champagne:  "from-[#F8F1E8] via-[#FFFFFF] to-[#F0E8DC]",
 };
 
 const themeLabel: Record<string, string> = {
-  classic: "Clássico",
-  wine: "Vinho",
-  rose: "Rosa Dream",
-  night: "Noite Estrelada",
+  classic:   "Clássico",
+  wine:      "Vinho",
+  rose:      "Rosa Dream",
+  night:     "Noite Estrelada",
+  champagne: "Champagne",
 };
 
 function generateSlug(value: string) {
@@ -251,63 +253,92 @@ export default function CreatePage() {
   const valentineDays = Math.floor(valentineMs / (1000 * 60 * 60 * 24));
   const valentineHours = Math.floor((valentineMs % (1000 * 60 * 60 * 24)) / (1000 * 60 * 60));
 
-  return (
-    <main className="romantic-gradient relative min-h-screen overflow-hidden px-4 pb-28 pt-6 md:pb-10">
-      <HeartBackground />
-      <div className="romantic-glow romantic-glow-left" />
-      <div className="romantic-glow romantic-glow-right" />
+  const inputStyle = { background: "#fff", color: "#1e0d0d", borderColor: "rgba(139,26,42,0.2)" };
+  const labelStyle = { color: "#1e0d0d" };
+  const cardStyle = { background: "rgba(139,26,42,0.03)", border: "1px solid rgba(139,26,42,0.1)" };
+  const isChampagne = theme === "champagne";
 
-      <div className="relative mx-auto mb-4 grid w-full max-w-6xl gap-2 rounded-2xl border border-white/20 bg-black/20 p-3 text-center text-cream/90 shadow-[0_18px_40px_rgba(0,0,0,0.25)] sm:grid-cols-3 sm:text-left">
-        <p className="text-sm">⏳ Dia dos Namorados em <strong className="text-white">{valentineDays} dias</strong> e <strong className="text-white">{valentineHours}h</strong></p>
-        <p className="text-sm">🔒 Checkout seguro e dados protegidos</p>
-        <p className="text-sm">💘 Mais de 10.000 surpresas criadas</p>
+  return (
+    <main
+      className="relative min-h-screen overflow-hidden px-4 pb-28 pt-6 md:pb-10"
+      style={{ background: "linear-gradient(160deg,#fdf6ee 0%,#f8ede0 40%,#faf2e8 100%)" }}
+    >
+      <HeartBackground />
+      <style>{`
+        #create-form input,
+        #create-form textarea,
+        #create-form select {
+          color: #1e0d0d !important;
+          background-color: #fff !important;
+        }
+        #create-form input::placeholder,
+        #create-form textarea::placeholder {
+          color: #7a6a6a !important;
+          opacity: 1;
+        }
+      `}</style>
+      <div className="pointer-events-none absolute -left-32 -top-32 h-[38rem] w-[38rem] rounded-full opacity-20" style={{ background: "radial-gradient(circle,rgba(139,26,42,0.45),transparent 70%)", filter: "blur(90px)" }} />
+      <div className="pointer-events-none absolute -right-32 top-16 h-[28rem] w-[28rem] rounded-full opacity-10" style={{ background: "radial-gradient(circle,rgba(201,168,76,0.4),transparent 70%)", filter: "blur(100px)" }} />
+
+      <div
+        className="relative mx-auto mb-4 grid w-full max-w-6xl gap-2 rounded-2xl p-3 text-center sm:grid-cols-3 sm:text-left"
+        style={{ background: "#ffffff", border: "1px solid rgba(139,26,42,0.09)", boxShadow: "0 4px 20px rgba(139,26,42,0.07)" }}
+      >
+        <p className="text-sm" style={{ color: "#5a3535" }}>⏳ Dia dos Namorados em <strong style={{ color: "#1e0d0d" }}>{valentineDays} dias</strong> e <strong style={{ color: "#1e0d0d" }}>{valentineHours}h</strong></p>
+        <p className="text-sm" style={{ color: "#5a3535" }}>🔒 Checkout seguro e dados protegidos</p>
+        <p className="text-sm" style={{ color: "#5a3535" }}>💘 Mais de 10.000 surpresas criadas</p>
       </div>
 
       <div className="relative mx-auto grid w-full max-w-6xl gap-4 md:grid-cols-[1.04fr_0.96fr]">
-        <form id="create-form" onSubmit={onSubmit} className="glass-card form-shell space-y-4 p-4 sm:p-6">
-          <h1 className="text-center text-4xl font-black leading-tight text-white md:text-left">
+        <form
+          id="create-form"
+          onSubmit={onSubmit}
+          className="rounded-3xl space-y-4 p-4 sm:p-6"
+          style={{ background: "#ffffff", border: "1px solid rgba(139,26,42,0.12)", boxShadow: "0 4px 24px rgba(139,26,42,0.08)" }}
+        >
+          <h1 className="text-center text-4xl font-black leading-tight md:text-left" style={{ color: "#1e0d0d" }}>
             Crie um momento que vira lembrança eterna
           </h1>
 
-          <p className="text-center text-base text-cream/85 md:text-left">
+          <p className="text-center text-base md:text-left" style={{ color: "#5a3535" }}>
             Interface premium para você montar sua página romântica em poucos minutos.
           </p>
 
           <label className="block">
-            <span className="mb-1 block text-sm font-medium text-cream/90">Seu nome</span>
+            <span className="mb-1 block text-sm font-medium" style={labelStyle}>Seu nome</span>
             <div className="relative">
               <span className="input-icon">👤</span>
-              <input name="creatorName" value={creatorName} onChange={(e) => setCreatorName(e.target.value)} required placeholder="Seu nome" className="input-modern input-with-icon" />
+              <input name="creatorName" value={creatorName} onChange={(e) => setCreatorName(e.target.value)} required placeholder="Seu nome" className="input-modern input-with-icon" style={inputStyle} />
             </div>
           </label>
 
           <label className="block">
-            <span className="mb-1 block text-sm font-medium text-cream/90">Pessoa amada</span>
+            <span className="mb-1 block text-sm font-medium" style={labelStyle}>Pessoa amada</span>
             <div className="relative">
               <span className="input-icon">💖</span>
-              <input name="partnerName" value={partnerName} onChange={(e) => setPartnerName(e.target.value)} required placeholder="Nome da pessoa amada" className="input-modern input-with-icon" />
+              <input name="partnerName" value={partnerName} onChange={(e) => setPartnerName(e.target.value)} required placeholder="Nome da pessoa amada" className="input-modern input-with-icon" style={inputStyle} />
             </div>
           </label>
 
           <label className="block">
-            <span className="mb-1 block text-sm font-medium text-cream/90">Nome do casal</span>
+            <span className="mb-1 block text-sm font-medium" style={labelStyle}>Nome do casal</span>
             <div className="relative">
               <span className="input-icon">✨</span>
-              <input name="coupleName" value={coupleName} onChange={(e) => { setCoupleName(e.target.value); if (!slugEditedManually) setSlug(generateSlug(e.target.value)); }} required placeholder="Ex: Ana e Lucas" className="input-modern input-with-icon" />
+              <input name="coupleName" value={coupleName} onChange={(e) => { setCoupleName(e.target.value); if (!slugEditedManually) setSlug(generateSlug(e.target.value)); }} required placeholder="Ex: Ana e Lucas" className="input-modern input-with-icon" style={inputStyle} />
             </div>
           </label>
 
           <label className="block">
-            <span className="mb-1 block text-sm font-medium text-cream/90">Data de início</span>
+            <span className="mb-1 block text-sm font-medium" style={labelStyle}>Data de início</span>
             <div className="relative">
               <span className="input-icon">📅</span>
-              <input name="startDate" value={startDate} onChange={(e) => setStartDate(e.target.value)} required type="date" className="input-modern input-with-icon" />
+              <input name="startDate" value={startDate} onChange={(e) => setStartDate(e.target.value)} required type="date" className="input-modern input-with-icon" style={inputStyle} />
             </div>
           </label>
 
-          <div className="space-y-3 rounded-2xl border border-white/15 bg-white/5 p-4">
+          <div className="space-y-3 rounded-2xl p-4" style={cardStyle}>
             <label className="block">
-              <span className="mb-1 block text-sm font-medium text-cream/90">
+              <span className="mb-1 block text-sm font-medium" style={labelStyle}>
                 Me conte momentos importantes de vocês dois
               </span>
               <div className="relative">
@@ -318,6 +349,7 @@ export default function CreatePage() {
                   maxLength={2000}
                   placeholder="Ex: nosso primeiro encontro foi no shopping, viajamos juntos para praia, ela me apoiou em um momento difícil, temos a música X como especial..."
                   className="input-modern input-with-icon min-h-24"
+                  style={inputStyle}
                 />
               </div>
             </label>
@@ -326,15 +358,16 @@ export default function CreatePage() {
               type="button"
               onClick={handleGenerateLetter}
               disabled={generatingLetter}
-              className="w-full rounded-full border border-[#d4af37]/45 bg-gradient-to-r from-[#7b2049] via-[#5a1f58] to-[#2a152b] px-6 py-3 text-sm font-semibold text-white shadow-[0_0_24px_rgba(212,175,55,0.2)] transition hover:brightness-110 disabled:opacity-60"
+              className="w-full rounded-full px-6 py-3 text-sm font-semibold text-white transition hover:brightness-110 disabled:opacity-60"
+              style={{ background: "linear-gradient(135deg,#8b1a2a,#6a1525)", border: "1px solid rgba(139,26,42,0.3)", boxShadow: "0 4px 16px rgba(139,26,42,0.2)" }}
             >
               {generatingLetter ? "Gerando carta..." : "Gerar carta com IA ✨"}
             </button>
 
-            {letterError && <p className="text-sm text-red-300">{letterError}</p>}
+            {letterError && <p className="text-sm" style={{ color: "#991b1b" }}>{letterError}</p>}
 
             <label className="block">
-              <span className="mb-1 block text-sm font-medium text-cream/90">Mensagem romântica</span>
+              <span className="mb-1 block text-sm font-medium" style={labelStyle}>Mensagem romântica</span>
               <div className="relative">
                 <span className="input-icon">💌</span>
                 <textarea
@@ -344,26 +377,32 @@ export default function CreatePage() {
                   required
                   placeholder="Escreva algo inesquecível ou gere com IA acima..."
                   className="input-modern input-with-icon min-h-32"
+                  style={inputStyle}
                 />
               </div>
-              <p className="mt-1 text-xs text-cream/60">
+              <p className="mt-1 text-xs" style={{ color: "#7a4848" }}>
                 Você pode editar a carta depois de gerar.
               </p>
             </label>
           </div>
 
-          <div className="space-y-3 rounded-2xl border border-white/15 bg-white/5 p-4">
-            <p className="text-sm text-cream/90">
+          <div className="space-y-3 rounded-2xl p-4" style={cardStyle}>
+            <p className="text-sm" style={{ color: "#3a2020" }}>
               Fotos e vídeos do casal ({validMedia.length}
               {plan === "FREE" ? `/${MAX_PHOTOS_FREE}` : ""})
             </p>
 
             <label
-              className={`flex w-full cursor-pointer items-center justify-center rounded-xl border px-4 py-4 text-sm font-semibold text-cream transition ${
+              className={`flex w-full cursor-pointer items-center justify-center rounded-xl border px-4 py-4 text-sm font-semibold transition ${
                 canPickFromGallery && !uploadingPhotos
-                  ? "border-[#d4af37]/40 bg-[#d4af37]/10 hover:bg-[#d4af37]/20"
-                  : "cursor-not-allowed border-white/15 bg-white/5 opacity-60"
+                  ? "hover:opacity-80"
+                  : "cursor-not-allowed opacity-60"
               }`}
+              style={
+                canPickFromGallery && !uploadingPhotos
+                  ? { background: "rgba(139,26,42,0.07)", border: "1px solid rgba(139,26,42,0.2)", color: "#8b1a2a" }
+                  : { background: "rgba(139,26,42,0.03)", border: "1px solid rgba(139,26,42,0.1)", color: "#9b7070" }
+              }
             >
               <span className="text-center">
                 {uploadingPhotos
@@ -383,7 +422,7 @@ export default function CreatePage() {
             </label>
 
             {plan === "PREMIUM" && (
-              <p className="text-xs text-cream/65">
+              <p className="text-xs" style={{ color: "#7a4848" }}>
                 No celular, você pode selecionar várias fotos e vídeos de uma vez na galeria.
               </p>
             )}
@@ -391,7 +430,7 @@ export default function CreatePage() {
             {mediaItems.length > 0 && (
               <div className="grid grid-cols-2 gap-2 sm:grid-cols-3">
                 {mediaItems.map((item, index) => (
-                  <div key={`${item.url}-${index}`} className="relative overflow-hidden rounded-xl border border-white/15">
+                  <div key={`${item.url}-${index}`} className="relative overflow-hidden rounded-xl" style={{ border: "1px solid rgba(139,26,42,0.15)" }}>
                     {item.type === "video" ? (
                       <video src={item.url} className="h-28 w-full object-cover" muted playsInline preload="metadata" />
                     ) : (
@@ -422,13 +461,15 @@ export default function CreatePage() {
                   onChange={(e) => setMediaUrlInput(e.target.value)}
                   placeholder="Ou cole uma URL de imagem ou vídeo (https://)"
                   className="input-modern input-with-icon"
+                  style={inputStyle}
                 />
               </div>
               <button
                 type="button"
                 onClick={addMediaUrl}
                 disabled={uploadingPhotos}
-                className="rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-sm font-semibold text-cream transition hover:bg-white/20 disabled:opacity-60"
+                className="rounded-xl px-4 py-3 text-sm font-semibold transition hover:opacity-80 disabled:opacity-60"
+                style={{ border: "1px solid rgba(139,26,42,0.25)", background: "rgba(139,26,42,0.06)", color: "#8b1a2a" }}
               >
                 Adicionar URL
               </button>
@@ -436,10 +477,10 @@ export default function CreatePage() {
           </div>
 
           <label className="block">
-            <span className="mb-1 block text-sm font-medium text-cream/90">Link da música no YouTube</span>
+            <span className="mb-1 block text-sm font-medium" style={labelStyle}>Link da música no YouTube</span>
             <div className="relative">
               <span className="input-icon">🎵</span>
-              <input name="musicUrl" value={musicUrl} onChange={(e) => setMusicUrl(e.target.value)} placeholder="Cole o link do YouTube aqui" className="input-modern input-with-icon" />
+              <input name="musicUrl" value={musicUrl} onChange={(e) => setMusicUrl(e.target.value)} placeholder="Cole o link do YouTube aqui" className="input-modern input-with-icon" style={inputStyle} />
             </div>
           </label>
 
@@ -451,23 +492,29 @@ export default function CreatePage() {
           />
 
           <label className="block">
-            <span className="mb-1 block text-sm font-medium text-cream/90">Tema visual</span>
+            <span className="mb-1 block text-sm font-medium" style={labelStyle}>Tema visual</span>
             <div className="relative">
               <span className="input-icon">🎨</span>
-              <select name="theme" value={theme} onChange={(e) => setTheme(e.target.value)} className="input-modern input-with-icon bg-[#2b2030] text-white">
-                <option className="bg-white text-black" value="classic">Clássico</option>
-                <option className="bg-white text-black" value="wine">Vinho</option>
-                <option className="bg-white text-black" value="rose">Rosa Dream</option>
-                <option className="bg-white text-black" value="night">Noite Estrelada</option>
+              <select name="theme" value={theme} onChange={(e) => setTheme(e.target.value)} className="input-modern input-with-icon" style={inputStyle}>
+                <option value="classic">Clássico</option>
+                <option value="wine">Vinho</option>
+                <option value="rose">Rosa Dream</option>
+                <option value="night">Noite Estrelada</option>
+                <option value="champagne">Champagne</option>
               </select>
-              <div className={`mt-3 rounded-2xl border border-white/25 p-4 text-center bg-gradient-to-br transition-all duration-500 ${themePreviewConfig[theme] ?? themePreviewConfig.classic}`}>
-                <p className="text-xs uppercase tracking-[0.2em] text-white/80">
+              <div
+                className={`mt-3 rounded-2xl p-4 text-center bg-gradient-to-br transition-all duration-500 ${themePreviewConfig[theme] ?? themePreviewConfig.classic}`}
+                style={theme === "champagne"
+                  ? { border: "1px solid rgba(139,26,42,0.12)", boxShadow: "0 4px 16px rgba(139,26,42,0.07)" }
+                  : { border: "1px solid rgba(255,255,255,0.25)" }}
+              >
+                <p className="text-xs uppercase tracking-[0.2em]" style={{ color: theme === "champagne" ? "#6b4040" : "rgba(255,255,255,0.8)" }}>
                   Preview do tema
                 </p>
-                <p className="mt-1 text-xl font-bold text-white">
+                <p className="mt-1 text-xl font-bold" style={{ color: theme === "champagne" ? "#1e0d0d" : "#ffffff" }}>
                   {themeLabel[theme] ?? "Clássico"}
                 </p>
-                <p className="mt-1 text-sm text-white/80">
+                <p className="mt-1 text-sm" style={{ color: theme === "champagne" ? "#6b4040" : "rgba(255,255,255,0.8)" }}>
                   Assim ficará a aparência principal da surpresa.
                 </p>
               </div>
@@ -475,47 +522,69 @@ export default function CreatePage() {
           </label>
 
           <label className="block">
-            <span className="mb-1 block text-sm font-medium text-cream/90">Slug personalizado</span>
+            <span className="mb-1 block text-sm font-medium" style={labelStyle}>Slug personalizado</span>
             <div className="relative">
               <span className="input-icon">🔗</span>
-              <input name="slug" value={slug} onChange={(e) => { setSlugEditedManually(true); setSlug(e.target.value); }} required placeholder="ana-e-lucas" className="input-modern input-with-icon" />
+              <input name="slug" value={slug} onChange={(e) => { setSlugEditedManually(true); setSlug(e.target.value); }} required placeholder="ana-e-lucas" className="input-modern input-with-icon" style={inputStyle} />
             </div>
           </label>
 
           <div className="grid grid-cols-2 gap-3">
-            <button type="button" onClick={() => setPlan("FREE")} className={`rounded-2xl p-3 text-base font-semibold transition ${plan === "FREE" ? "bg-gradient-to-r from-[#6a234b] to-[#4a1f4f] text-white shadow-[0_0_24px_rgba(212,175,55,0.2)] border border-[#d4af37]/35" : "bg-white/10 text-cream hover:bg-white/20"}`}>
-              Plano Grátis
+            <button
+              type="button"
+              onClick={() => setPlan("FREE")}
+              className="rounded-2xl p-3 text-base font-semibold transition"
+              style={
+                plan === "FREE"
+                  ? { background: "linear-gradient(135deg,#8b1a2a,#6a1525)", color: "#fff", border: "1px solid rgba(139,26,42,0.4)", boxShadow: "0 4px 16px rgba(139,26,42,0.2)" }
+                  : { background: "rgba(139,26,42,0.05)", color: "#8b1a2a", border: "1px solid rgba(139,26,42,0.2)" }
+              }
+            >
+              Clássico
             </button>
 
-            <button type="button" onClick={() => setPlan("PREMIUM")} className={`rounded-2xl p-3 text-base font-semibold transition ${plan === "PREMIUM" ? "bg-gradient-to-r from-[#6a234b] to-[#4a1f4f] text-white shadow-[0_0_24px_rgba(212,175,55,0.2)] border border-[#d4af37]/35" : "bg-white/10 text-cream hover:bg-white/20"}`}>
-              Plano Premium
+            <button
+              type="button"
+              onClick={() => setPlan("PREMIUM")}
+              className="rounded-2xl p-3 text-base font-semibold transition"
+              style={
+                plan === "PREMIUM"
+                  ? { background: "linear-gradient(135deg,#8b1a2a,#6a1525)", color: "#fff", border: "1px solid rgba(139,26,42,0.4)", boxShadow: "0 4px 16px rgba(139,26,42,0.2)" }
+                  : { background: "rgba(139,26,42,0.05)", color: "#8b1a2a", border: "1px solid rgba(139,26,42,0.2)" }
+              }
+            >
+               Premium
             </button>
           </div>
 
           {error && (
-            <div className="flex items-start gap-2 rounded-xl border border-red-500/50 bg-red-500/20 px-4 py-3">
+            <div className="flex items-start gap-2 rounded-xl px-4 py-3" style={{ border: "1px solid rgba(220,38,38,0.35)", background: "rgba(220,38,38,0.07)" }}>
               <span className="mt-0.5 shrink-0">⚠️</span>
-              <p className="text-sm font-medium text-white">{error}</p>
+              <p className="text-sm font-medium" style={{ color: "#991b1b" }}>{error}</p>
             </div>
           )}
 
           <button
             type="submit"
             disabled={loading || uploadingPhotos}
-            className="hidden w-full items-center justify-center rounded-full border border-[#d4af37]/45 bg-gradient-to-r from-[#7b2049] via-[#5a1f58] to-[#2a152b] py-4 text-lg font-semibold text-white shadow-[0_0_35px_rgba(212,175,55,0.3)] transition hover:brightness-110 disabled:opacity-70 md:inline-flex"
+            className="hidden w-full items-center justify-center rounded-full py-4 text-lg font-semibold text-white transition hover:brightness-110 disabled:opacity-70 md:inline-flex"
+            style={{ background: "linear-gradient(135deg,#8b1a2a,#6a1525)", border: "1px solid rgba(139,26,42,0.35)", boxShadow: "0 8px 32px rgba(139,26,42,0.25)" }}
           >
             {loading ? "Criando..." : uploadingPhotos ? "Aguarde o envio das mídias..." : "Continuar"}
           </button>
         </form>
 
-        <aside className="glass-card form-shell h-fit p-4 sm:p-5 md:sticky md:top-6">
+        <aside
+          className="rounded-3xl h-fit p-4 sm:p-5 md:sticky md:top-6"
+          style={{ background: "#ffffff", border: "1px solid rgba(139,26,42,0.12)", boxShadow: "0 4px 24px rgba(139,26,42,0.08)" }}
+        >
           <div className="flex items-center justify-between">
-            <p className="text-xs uppercase tracking-[0.2em] text-cream/70">Preview ao vivo</p>
-            <span className="rounded-full bg-white/10 px-2 py-0.5 text-xs text-cream/80">
+            <p className="text-xs uppercase tracking-[0.2em]" style={{ color: "#6b4040" }}>Preview ao vivo</p>
+            <span className="rounded-full px-2 py-0.5 text-xs" style={{ background: "rgba(139,26,42,0.08)", color: "#8b1a2a" }}>
               {themeLabel[theme] ?? "Clássico"}
             </span>
           </div>
-          <p className="mt-1 text-sm text-cream/85">Atualiza automaticamente enquanto voce digita.</p>
+          <p className="mt-1 text-sm" style={{ color: "#5a3535" }}>Atualiza automaticamente enquanto voce digita.</p>
 
           <div className="mt-3 flex justify-center">
             <div className="phone-mockup iphone-shell w-full max-w-[22rem]">
@@ -525,18 +594,25 @@ export default function CreatePage() {
                 <div className="screen-reflection" />
 
                 <div className="relative z-10 space-y-3">
-                  <div className="rounded-2xl border border-white/25 bg-white/10 p-3 backdrop-blur-md">
-                    <p className="text-[11px] uppercase tracking-[0.2em] text-cream/80">Nosso Momento</p>
-                    <h2 className="mt-1 text-2xl font-black text-white">{coupleName || "Seu casal aqui"}</h2>
-                    <p className="mt-1 text-xs text-cream/85">
+                  {/* Card casal */}
+                  <div
+                    className="rounded-2xl p-3 backdrop-blur-md"
+                    style={isChampagne
+                      ? { background: "rgba(255,255,255,0.75)", border: "1px solid rgba(139,26,42,0.14)" }
+                      : { background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.25)" }}
+                  >
+                    <p className="text-[11px] uppercase tracking-[0.2em]" style={{ color: isChampagne ? "#8b1a2a" : "rgba(255,235,215,0.8)" }}>Nosso Momento</p>
+                    <h2 className="mt-1 text-2xl font-black" style={{ color: isChampagne ? "#1e0d0d" : "#ffffff" }}>{coupleName || "Seu casal aqui"}</h2>
+                    <p className="mt-1 text-xs" style={{ color: isChampagne ? "#6b4040" : "rgba(255,235,215,0.85)" }}>
                       {creatorName || "Voce"} + {partnerName || "Amor"}
                     </p>
                   </div>
 
+                  {/* Galeria */}
                   <div className="grid grid-cols-3 gap-2">
                     {previewMedia.map((item, index) =>
                       item.type === "video" ? (
-                        <div key={index} className="relative h-16 w-full overflow-hidden rounded-xl border border-white/25">
+                        <div key={index} className="relative h-16 w-full overflow-hidden rounded-xl" style={{ border: `1px solid ${isChampagne ? "rgba(139,26,42,0.14)" : "rgba(255,255,255,0.25)"}` }}>
                           <video src={item.url} className="h-full w-full object-cover" muted playsInline preload="metadata" />
                           <span className="pointer-events-none absolute inset-0 flex items-center justify-center bg-black/25 text-xs text-white">
                             ▶
@@ -547,51 +623,84 @@ export default function CreatePage() {
                           key={index}
                           src={item.url}
                           alt={`Mídia do casal ${index + 1}`}
-                          className="h-16 w-full rounded-xl border border-white/25 object-cover"
+                          className="h-16 w-full rounded-xl object-cover"
+                          style={{ border: `1px solid ${isChampagne ? "rgba(139,26,42,0.14)" : "rgba(255,255,255,0.25)"}` }}
                         />
                       )
                     )}
                   </div>
 
-                  <div className="rounded-2xl border border-white/25 bg-black/25 p-3">
-                    <p className="text-xs text-cream/80">Tempo juntos</p>
-                    <p className="text-lg font-bold text-white">
+                  {/* Contador */}
+                  <div
+                    className="rounded-2xl p-3"
+                    style={isChampagne
+                      ? { background: "rgba(255,255,255,0.75)", border: "1px solid rgba(139,26,42,0.14)" }
+                      : { background: "rgba(0,0,0,0.25)", border: "1px solid rgba(255,255,255,0.25)" }}
+                  >
+                    <p className="text-xs" style={{ color: isChampagne ? "#8b1a2a" : "rgba(255,235,215,0.8)" }}>Tempo juntos</p>
+                    <p className="text-lg font-bold" style={{ color: isChampagne ? "#1e0d0d" : "#ffffff" }}>
                       {startDateObj ? `${loveYears} anos, ${loveMonths} meses e ${loveRemainderDays} dias` : "Defina a data para ativar o contador"}
                     </p>
                   </div>
 
-                  <div className="rounded-2xl border border-white/25 bg-white/10 p-3">
-                    <p className="line-clamp-3 text-sm text-cream/95">
+                  {/* Mensagem */}
+                  <div
+                    className="rounded-2xl p-3"
+                    style={isChampagne
+                      ? { background: "rgba(255,255,255,0.75)", border: "1px solid rgba(139,26,42,0.14)" }
+                      : { background: "rgba(255,255,255,0.1)", border: "1px solid rgba(255,255,255,0.25)" }}
+                  >
+                    <p className="line-clamp-3 text-sm" style={{ color: isChampagne ? "#6b4040" : "rgba(255,235,215,0.95)" }}>
                       {message || "Sua mensagem romântica aparecerá aqui em tempo real."}
                     </p>
                   </div>
 
+                  {/* Música + QR */}
                   <div className="grid grid-cols-[1fr_auto] gap-2">
-                    <div className="rounded-2xl border border-white/25 bg-gradient-to-r from-[#6a234b] to-[#4a1f4f] p-3">
-                      <p className="text-xs text-white/85">Música</p>
-                      <p className="truncate text-sm font-semibold text-white">
+                    <div
+                      className="rounded-2xl p-3"
+                      style={isChampagne
+                        ? { background: "rgba(255,255,255,0.75)", border: "1px solid rgba(139,26,42,0.14)" }
+                        : { background: "linear-gradient(135deg,#6a234b,#4a1f4f)", border: "1px solid rgba(255,255,255,0.25)" }}
+                    >
+                      <p className="text-xs" style={{ color: isChampagne ? "#8b1a2a" : "rgba(255,255,255,0.85)" }}>Música</p>
+                      <p className="truncate text-sm font-semibold" style={{ color: isChampagne ? "#1e0d0d" : "#ffffff" }}>
                         {musicUrl
                           ? musicStartTimeTotal > 0
                             ? `YouTube · começa em ${formattedMusicStart}`
                             : "YouTube · do começo"
                           : "Toque para reproduzir"}
                       </p>
-
                       <div className="mt-2 flex items-end gap-1">
                         {[12, 20, 14, 24, 10, 18].map((h, i) => (
-                          <span key={i} className="w-1.5 rounded-full bg-white/90 animate-pulse" style={{ height: `${h}px`, animationDelay: `${i * 0.1}s` }} />
+                          <span
+                            key={i}
+                            className="w-1.5 rounded-full animate-pulse"
+                            style={{ height: `${h}px`, animationDelay: `${i * 0.1}s`, background: isChampagne ? "#8b1a2a" : "rgba(255,255,255,0.9)" }}
+                          />
                         ))}
                       </div>
                     </div>
 
-                    <div className="rounded-2xl border border-white/25 bg-white/15 p-2">
+                    <div
+                      className="rounded-2xl p-2"
+                      style={isChampagne
+                        ? { background: "rgba(255,255,255,0.75)", border: "1px solid rgba(139,26,42,0.14)" }
+                        : { background: "rgba(255,255,255,0.15)", border: "1px solid rgba(255,255,255,0.25)" }}
+                    >
                       <img src={`https://api.qrserver.com/v1/create-qr-code/?size=116x116&data=${encodeURIComponent(`https://nossomomento.com.br/momento/${slug || "seu-slug"}`)}`} alt="QR Code do momento" className="h-[4.5rem] w-[4.5rem] rounded-lg" />
                     </div>
                   </div>
 
-                  <div className="rounded-2xl border border-white/20 bg-black/20 p-3">
-                    <p className="text-[11px] text-cream/80">Link final</p>
-                    <p className="truncate text-sm font-semibold text-white">
+                  {/* Link final */}
+                  <div
+                    className="rounded-2xl p-3"
+                    style={isChampagne
+                      ? { background: "rgba(255,255,255,0.75)", border: "1px solid rgba(139,26,42,0.14)" }
+                      : { background: "rgba(0,0,0,0.2)", border: "1px solid rgba(255,255,255,0.2)" }}
+                  >
+                    <p className="text-[11px]" style={{ color: isChampagne ? "#8b1a2a" : "rgba(255,235,215,0.8)" }}>Link final</p>
+                    <p className="truncate text-sm font-semibold" style={{ color: isChampagne ? "#1e0d0d" : "#ffffff" }}>
                       nossomomento.com.br/momento/{slug || "seu-slug"}
                     </p>
                   </div>
@@ -604,15 +713,16 @@ export default function CreatePage() {
 
       <div className="fixed bottom-3 left-0 right-0 z-30 px-4 md:hidden">
         {error && (
-          <div className="mb-2 flex items-start gap-2 rounded-xl border border-red-500/50 bg-red-500/20 px-4 py-3">
+          <div className="mb-2 flex items-start gap-2 rounded-xl px-4 py-3" style={{ border: "1px solid rgba(220,38,38,0.35)", background: "rgba(220,38,38,0.07)" }}>
             <span className="mt-0.5 shrink-0">⚠️</span>
-            <p className="text-sm font-medium text-white">{error}</p>
+            <p className="text-sm font-medium" style={{ color: "#991b1b" }}>{error}</p>
           </div>
         )}
         <button
           form="create-form"
           type="submit"
-          className="inline-flex w-full items-center justify-center rounded-full border border-[#d4af37]/45 bg-gradient-to-r from-[#7b2049] via-[#5a1f58] to-[#2a152b] py-4 text-lg font-semibold text-white shadow-[0_0_35px_rgba(212,175,55,0.3)] transition hover:brightness-110 disabled:opacity-70"
+          className="inline-flex w-full items-center justify-center rounded-full py-4 text-lg font-semibold text-white transition hover:brightness-110 disabled:opacity-70"
+          style={{ background: "linear-gradient(135deg,#8b1a2a,#6a1525)", border: "1px solid rgba(139,26,42,0.35)", boxShadow: "0 8px 32px rgba(139,26,42,0.25)" }}
           disabled={loading || uploadingPhotos}
         >
           {loading ? "Criando..." : uploadingPhotos ? "Enviando mídias..." : "Continuar"}

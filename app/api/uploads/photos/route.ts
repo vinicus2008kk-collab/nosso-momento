@@ -51,7 +51,7 @@ export async function POST(request: Request) {
 
     if (plan === "FREE" && files.length > MAX_PHOTOS_FREE) {
       return NextResponse.json(
-        { error: "Plano grátis permite apenas 1 mídia." },
+        { error: "Clássico permite apenas 1 mídia." },
         { status: 400 }
       );
     }
