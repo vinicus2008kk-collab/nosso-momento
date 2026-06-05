@@ -135,7 +135,7 @@ export default function HomePage() {
 
           {/* Trust row */}
           <div className="flex flex-wrap items-center gap-4 justify-center md:justify-start text-sm" style={{ color: "#7a4848" }}>
-            <span className="flex items-center gap-1.5"><span style={{ color: "#8b1a2a" }}>✓</span> Gratuito para começar</span>
+            <span className="flex items-center gap-1.5"><span style={{ color: "#8b1a2a" }}>✓</span> Facil de criar</span>
             <span className="flex items-center gap-1.5"><span style={{ color: "#8b1a2a" }}>✓</span> Pronto em 5 minutos</span>
             <span className="flex items-center gap-1.5"><span style={{ color: "#8b1a2a" }}>✓</span> Link exclusivo</span>
           </div>
