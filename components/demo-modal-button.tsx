@@ -50,7 +50,7 @@ export function DemoModalButton() {
               >
                 <div className="mb-1 flex items-center gap-2">
                   <span className="text-xl">🤍</span>
-                  <span className="text-lg font-bold" style={{ color: "#1e0d0d" }}>Demonstração Grátis</span>
+                  <span className="text-lg font-bold" style={{ color: "#1e0d0d" }}>Demonstração Clássica</span>
                 </div>
                 <span className="text-sm" style={{ color: "#7a4848" }}>
                   1 foto, mensagem especial e contador de tempo juntos.
