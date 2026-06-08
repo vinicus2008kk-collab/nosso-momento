@@ -3,7 +3,7 @@
 import { PrimaryButton } from "@/components/ui";
 import { HeartBackground } from "@/components/heart-background";
 
-export default function DemoGratisPage() {
+export default function DemoClássicoPage() {
   return (
     <main
       className="relative min-h-screen overflow-hidden px-4 py-10"

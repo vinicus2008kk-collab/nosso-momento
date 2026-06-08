@@ -66,7 +66,7 @@ export default function DemoPremiumPage() {
               Criar experiência Premium
             </PrimaryButton>
             <a
-              href="/demo/gratis"
+              href="/demo/Clássico"
               className="inline-flex items-center justify-center rounded-full px-8 py-4 text-base font-semibold transition hover:opacity-80"
               style={{ border: "1px solid rgba(139,26,42,0.25)", color: "#8b1a2a", background: "rgba(139,26,42,0.05)" }}
             >

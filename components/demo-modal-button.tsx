@@ -44,7 +44,7 @@ export function DemoModalButton() {
 
             <div className="flex flex-col gap-4">
               <Link
-                href="/demo/gratis"
+                href="/demo/Clássico"
                 className="flex flex-col rounded-2xl p-5 transition hover:scale-[1.01]"
                 style={{ background: "#ffffff", border: "1px solid rgba(139,26,42,0.12)" }}
               >
