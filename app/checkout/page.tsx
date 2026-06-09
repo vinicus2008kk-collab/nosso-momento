@@ -25,10 +25,18 @@ export default async function CheckoutPage({
     redirect("/criar");
   }
 
-  const checkoutUrl =
+  const baseCheckoutUrl =
     page.plan === "PREMIUM"
       ? KIWIFY_CHECKOUTS.PREMIUM
       : KIWIFY_CHECKOUTS.CLASSIC;
 
-  redirect(checkoutUrl);
+  const checkoutUrl = new URL(baseCheckoutUrl);
+
+  checkoutUrl.searchParams.set("s1", page.id);
+  checkoutUrl.searchParams.set("src", page.id);
+  checkoutUrl.searchParams.set("utm_source", "surpresadeamor");
+  checkoutUrl.searchParams.set("utm_medium", "checkout");
+  checkoutUrl.searchParams.set("utm_campaign", page.plan === "PREMIUM" ? "premium" : "classic");
+
+  redirect(checkoutUrl.toString());
 }
