@@ -37,7 +37,7 @@ export default async function SuccessPage({
           <h1 className="mt-3 text-2xl font-bold text-white">Aguardando confirmação</h1>
           <p className="mt-2 text-sm text-cream/80">
             Seu pagamento está sendo processado. Esta página atualiza automaticamente após a
-            confirmação do Mercado Pago.
+            confirmação do pagamento.
           </p>
           <meta httpEquiv="refresh" content="5" />
         </div>
