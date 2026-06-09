@@ -214,8 +214,8 @@ export default function CreatePage() {
       musicUrl: plan === "PREMIUM" ? formData.get("musicUrl") || "" : "",
       musicStartTime: plan === "PREMIUM" ? musicStartTimeTotal : 0,
       theme: plan === "PREMIUM" ? formData.get("theme") : "classic",
-      slug: formData.get("slug"),
-      plan
+      slug: generateSlug(String(formData.get("slug") || "")),
+      plan: plan === "PREMIUM" ? "PREMIUM" : "FREE"
     };
 
     const response = await fetch("/api/romantic-pages", {
@@ -535,7 +535,18 @@ export default function CreatePage() {
             <span className="mb-1 block text-sm font-medium" style={labelStyle}>Slug personalizado</span>
             <div className="relative">
               <span className="input-icon">🔗</span>
-              <input name="slug" value={slug} onChange={(e) => { setSlugEditedManually(true); setSlug(e.target.value); }} required placeholder="ana-e-lucas" className="input-modern input-with-icon" style={inputStyle} />
+              <input
+                name="slug"
+                value={slug}
+                onChange={(e) => {
+                  setSlugEditedManually(true);
+                  setSlug(generateSlug(e.target.value));
+                }}
+                required
+                placeholder="Ex: Ana e Lucas"
+                className="input-modern input-with-icon"
+                style={inputStyle}
+              />
             </div>
           </label>
 
