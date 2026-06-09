@@ -104,7 +104,8 @@ export default function CreatePage() {
 
     try {
       const selected = plan === "CLASSIC" ? files.slice(0, MAX_PHOTOS_FREE) : files;
-      const items = await uploadPhotosToStorage(selected, plan);
+      const uploadPlan = plan === "PREMIUM" ? "PREMIUM" : "FREE";
+      const items = await uploadPhotosToStorage(selected, uploadPlan);
       setMediaItems((current) => (plan === "CLASSIC" ? items : [...current, ...items]));
     } catch (uploadError) {
       setError(
