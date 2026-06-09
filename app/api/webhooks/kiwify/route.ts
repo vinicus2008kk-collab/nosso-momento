@@ -9,44 +9,60 @@ type KiwifyPayload = {
   webhook_event_type?: string;
   type?: string;
   status?: string;
+
+  s1?: string;
+  s2?: string;
+  s3?: string;
+  src?: string;
+
   pageId?: string;
   page_id?: string;
+
   metadata?: {
     pageId?: string;
     page_id?: string;
+    s1?: string;
+    src?: string;
   };
+
   checkout_data?: {
     pageId?: string;
     page_id?: string;
+    s1?: string;
+    src?: string;
   };
+
+  tracking?: {
+    s1?: string;
+    src?: string;
+  };
+
   order?: {
     pageId?: string;
     product_name?: string;
     customer_email?: string;
+    s1?: string;
+    src?: string;
   };
+
   data?: {
     pageId?: string;
     page_id?: string;
     product_name?: string;
     customer_email?: string;
+    s1?: string;
+    src?: string;
   };
+
   Product?: {
     product_name?: string;
   };
+
   product?: {
     name?: string;
   };
+
   product_name?: string;
-  Customer?: {
-    email?: string;
-  };
-  customer?: {
-    email?: string;
-  };
-  buyer?: {
-    email?: string;
-  };
-  email?: string;
 };
 
 function normalizeText(value: unknown) {
@@ -73,17 +89,27 @@ function getProductName(body: KiwifyPayload) {
   );
 }
 
-
-
 function getPageId(body: KiwifyPayload) {
   return (
+    body.s1 ||
+    body.src ||
     body.pageId ||
     body.page_id ||
+    body.metadata?.s1 ||
+    body.metadata?.src ||
     body.metadata?.pageId ||
     body.metadata?.page_id ||
+    body.checkout_data?.s1 ||
+    body.checkout_data?.src ||
     body.checkout_data?.pageId ||
     body.checkout_data?.page_id ||
+    body.tracking?.s1 ||
+    body.tracking?.src ||
+    body.order?.s1 ||
+    body.order?.src ||
     body.order?.pageId ||
+    body.data?.s1 ||
+    body.data?.src ||
     body.data?.pageId ||
     body.data?.page_id ||
     null
@@ -106,8 +132,9 @@ function detectPlan(body: KiwifyPayload) {
   const productName = getProductName(body);
 
   if (productName.includes("premium")) return "PREMIUM";
-  if (productName.includes("clássico")) return "CLASSIC";
-  if (productName.includes("classico")) return "CLASSIC";
+  if (productName.includes("clássico")) return "FREE";
+  if (productName.includes("classico")) return "FREE";
+  if (productName.includes("classic")) return "FREE";
 
   return null;
 }
@@ -123,30 +150,29 @@ export async function POST(request: Request) {
     const pageId = getPageId(body);
     const plan = detectPlan(body);
 
-    let page = null;
-
-    if (pageId) {
-      page = await prisma.romanticPage.findUnique({
-        where: { id: String(pageId) },
-      });
+    if (!pageId) {
+      return NextResponse.json(
+        {
+          received: true,
+          error: "Webhook aprovado recebido, mas sem pageId/s1/src.",
+        },
+        { status: 400 }
+      );
     }
 
-    if (!page) {
-      page = await prisma.romanticPage.findFirst({
-        where: {
-          paymentStatus: "PENDING",
-        },
-        orderBy: {
-          createdAt: "desc",
-        },
-      });
-    }
+    const page = await prisma.romanticPage.findUnique({
+      where: { id: String(pageId) },
+    });
 
     if (!page) {
-      return NextResponse.json({
-        received: true,
-        warning: "Nenhuma surpresa pendente encontrada para liberar.",
-      });
+      return NextResponse.json(
+        {
+          received: true,
+          error: "Surpresa não encontrada para este pageId.",
+          pageId,
+        },
+        { status: 404 }
+      );
     }
 
     const finalPlan = plan ?? page.plan;
