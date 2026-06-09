@@ -260,7 +260,7 @@ export default function CreatePage() {
 
   return (
     <main
-      className="relative min-h-screen overflow-hidden px-4 pb-28 pt-6 md:pb-10"
+      className="relative min-h-screen w-full max-w-full overflow-x-hidden px-4 pb-28 pt-6 md:pb-10"
       style={{ background: "linear-gradient(160deg,#fdf6ee 0%,#f8ede0 40%,#faf2e8 100%)" }}
     >
       <HeartBackground />
@@ -270,6 +270,15 @@ export default function CreatePage() {
         #create-form select {
           color: #1e0d0d !important;
           background-color: #fff !important;
+          width: 100% !important;
+          max-width: 100% !important;
+          min-width: 0 !important;
+          box-sizing: border-box !important;
+        }
+        #create-form label > .relative {
+          width: 100%;
+          max-width: 100%;
+          min-width: 0;
         }
         #create-form input::placeholder,
         #create-form textarea::placeholder {
@@ -293,7 +302,7 @@ export default function CreatePage() {
         <form
           id="create-form"
           onSubmit={onSubmit}
-          className="rounded-3xl space-y-4 p-4 sm:p-6"
+          className="rounded-3xl w-full min-w-0 overflow-x-hidden space-y-4 p-4 sm:p-6"
           style={{ background: "#ffffff", border: "1px solid rgba(139,26,42,0.12)", boxShadow: "0 4px 24px rgba(139,26,42,0.08)" }}
         >
           <h1 className="text-center text-4xl font-black leading-tight md:text-left" style={{ color: "#1e0d0d" }}>
@@ -330,13 +339,13 @@ export default function CreatePage() {
 
           <label className="block">
             <span className="mb-1 block text-sm font-medium" style={labelStyle}>Data de início</span>
-            <div className="relative">
+            <div className="relative w-full max-w-full min-w-0 overflow-hidden">
               <span className="input-icon">📅</span>
               <input name="startDate" value={startDate} onChange={(e) => setStartDate(e.target.value)} required type="date" className="input-modern input-with-icon" style={inputStyle} />
             </div>
           </label>
 
-          <div className="space-y-3 rounded-2xl p-4" style={cardStyle}>
+          <div className="w-full max-w-full min-w-0 space-y-3 rounded-2xl p-4" style={cardStyle}>
             <label className="block">
               <span className="mb-1 block text-sm font-medium" style={labelStyle}>
                 Me conte momentos importantes de vocês dois
@@ -386,7 +395,7 @@ export default function CreatePage() {
             </label>
           </div>
 
-          <div className="space-y-3 rounded-2xl p-4" style={cardStyle}>
+          <div className="w-full max-w-full min-w-0 space-y-3 rounded-2xl p-4" style={cardStyle}>
             <p className="text-sm" style={{ color: "#3a2020" }}>
               Fotos e vídeos do casal ({validMedia.length}
               {plan === "FREE" ? `/${MAX_PHOTOS_FREE}` : ""})
