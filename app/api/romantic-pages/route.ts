@@ -46,7 +46,7 @@ export async function POST(request: Request) {
         slug: finalSlug,
         plan: payload.plan,
         isPremium: false,
-        paymentStatus: payload.plan === "PREMIUM" ? "PENDING" : "APPROVED"
+        paymentStatus: "PENDING"
       }
     });
 
