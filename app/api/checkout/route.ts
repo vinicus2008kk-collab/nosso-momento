@@ -5,19 +5,21 @@ import { NextResponse } from "next/server";
 
 export const dynamic = "force-dynamic";
 
-const PREMIUM_PRICE = 19.9;
+const PLAN_CONFIG: Record<string, { price: number; title: string }> = {
+  CLASSIC: { price: 9.99, title: "Nosso Momento Clássico" },
+  PREMIUM: { price: 19.99, title: "Nosso Momento Premium" },
+};
 
 export async function POST(request: Request) {
   try {
     if (!isMercadoPagoConfigured()) {
       return NextResponse.json(
-        { error: "Pagamento online indisponível no momento. Use o modo teste para continuar." },
+        { error: "Pagamento online indisponível no momento." },
         { status: 503 }
       );
     }
 
     const { preferenceClient } = await import("@/lib/mercadoPago");
-
     const { pageId } = await request.json();
 
     if (!pageId) {
@@ -32,28 +34,42 @@ export async function POST(request: Request) {
       return NextResponse.json({ error: "Página não encontrada." }, { status: 404 });
     }
 
-    const appUrl = process.env.NEXT_PUBLIC_APP_URL ?? "http://localhost:3000";
-    const externalReference = page.id;
+    const planKey = page.plan === "PREMIUM" ? "PREMIUM" : "CLASSIC";
+    const { price, title } = PLAN_CONFIG[planKey];
+
+    const appUrl =
+      process.env.NEXT_PUBLIC_BASE_URL ??
+      process.env.NEXT_PUBLIC_APP_URL ??
+      "http://localhost:3000";
 
     const preference = await preferenceClient.create({
       body: {
         items: [
           {
             id: page.id,
-            title: "Nosso Momento Premium",
+            title,
             quantity: 1,
             currency_id: "BRL",
-            unit_price: PREMIUM_PRICE,
+            unit_price: price,
           },
         ],
-        external_reference: externalReference,
+
+        external_reference: page.id,
+
         back_urls: {
           success: `${appUrl}/sucesso?pageId=${page.id}`,
           pending: `${appUrl}/checkout?pageId=${page.id}&status=pending`,
           failure: `${appUrl}/checkout?pageId=${page.id}&status=failed`,
         },
+
         notification_url: `${appUrl}/api/webhooks/mercadopago`,
         auto_return: "approved",
+
+        payment_methods: {
+          excluded_payment_methods: [],
+          excluded_payment_types: [],
+          installments: 1,
+        },
       },
     });
 
@@ -61,7 +77,7 @@ export async function POST(request: Request) {
       data: {
         romanticPageId: page.id,
         status: "PENDING",
-        amount: PREMIUM_PRICE,
+        amount: price,
       },
     });
 

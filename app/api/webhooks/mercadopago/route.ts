@@ -32,9 +32,7 @@ export async function POST(request: Request) {
     }
 
     const response = await fetch(`https://api.mercadopago.com/v1/payments/${paymentId}`, {
-      headers: {
-        Authorization: `Bearer ${token}`
-      }
+      headers: { Authorization: `Bearer ${token}` },
     });
 
     if (!response.ok) {
@@ -48,22 +46,24 @@ export async function POST(request: Request) {
 
     const mappedStatus = mapStatus(payment.status);
 
+    const page = await prisma.romanticPage.findUnique({ where: { id: pageId } });
+    if (!page) return NextResponse.json({ received: true });
+
     await prisma.payment.updateMany({
       where: { romanticPageId: pageId },
       data: {
         mercadoPagoPaymentId: String(payment.id),
         status: mappedStatus,
-        amount: payment.transaction_amount ?? 0
-      }
+        amount: payment.transaction_amount ?? 0,
+      },
     });
 
     await prisma.romanticPage.update({
       where: { id: pageId },
       data: {
         paymentStatus: mappedStatus,
-        isPremium: mappedStatus === "APPROVED",
-        plan: mappedStatus === "APPROVED" ? "PREMIUM" : "FREE"
-      }
+        isPremium: mappedStatus === "APPROVED" && page.plan === "PREMIUM",
+      },
     });
 
     return NextResponse.json({ received: true });

@@ -31,6 +31,8 @@ model RomanticPage {
   plan            String    @default("FREE")
   isPremium       Boolean   @default(false)
   paymentStatus   String    @default("PENDING")
+  deliveryMethod  String?
+  deliveryContact String?
   userId          String?
   user            User?     @relation(fields: [userId], references: [id])
   payments        Payment[]

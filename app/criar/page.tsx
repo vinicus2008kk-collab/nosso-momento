@@ -9,7 +9,7 @@ import { uploadPhotosToStorage } from "@/lib/upload-photos-client";
 import { ChangeEvent, FormEvent, useEffect, useMemo, useState } from "react";
 import { useRouter } from "next/navigation";
 
-type Plan = "FREE" | "PREMIUM";
+type Plan = "CLASSIC" | "PREMIUM";
 
 const themePreviewConfig: Record<string, string> = {
   classic:    "from-[#190a21] via-[#2d1b4e] to-[#0d0b14]",
@@ -43,7 +43,7 @@ export default function CreatePage() {
   const [mediaItems, setMediaItems] = useState<PageMediaItem[]>([]);
   const [mediaUrlInput, setMediaUrlInput] = useState("");
   const [uploadingPhotos, setUploadingPhotos] = useState(false);
-  const [plan, setPlan] = useState<Plan>("FREE");
+  const [plan, setPlan] = useState<Plan>("CLASSIC");
   const [error, setError] = useState("");
   const [creatorName, setCreatorName] = useState("");
   const [partnerName, setPartnerName] = useState("");
@@ -89,7 +89,7 @@ export default function CreatePage() {
   }, []);
 
   useEffect(() => {
-    if (plan === "FREE") {
+    if (plan === "CLASSIC") {
       setMediaItems((current) => current.slice(0, MAX_PHOTOS_FREE));
     }
   }, [plan]);
@@ -103,9 +103,9 @@ export default function CreatePage() {
     setUploadingPhotos(true);
 
     try {
-      const selected = plan === "FREE" ? files.slice(0, MAX_PHOTOS_FREE) : files;
+      const selected = plan === "CLASSIC" ? files.slice(0, MAX_PHOTOS_FREE) : files;
       const items = await uploadPhotosToStorage(selected, plan);
-      setMediaItems((current) => (plan === "FREE" ? items : [...current, ...items]));
+      setMediaItems((current) => (plan === "CLASSIC" ? items : [...current, ...items]));
     } catch (uploadError) {
       setError(
         uploadError instanceof Error
@@ -132,14 +132,14 @@ export default function CreatePage() {
 
     setError("");
     setMediaItems((current) => {
-      if (plan === "FREE") return [item];
+      if (plan === "CLASSIC") return [item];
       if (current.some((entry) => entry.url === url)) return current;
       return [...current, item];
     });
     setMediaUrlInput("");
   }
 
-  const canPickFromGallery = plan === "PREMIUM" || mediaItems.length < MAX_PHOTOS_FREE;
+  const canPickFromGallery = plan === "PREMIUM" || (plan === "CLASSIC" && mediaItems.length < MAX_PHOTOS_FREE);
 
   async function handleGenerateLetter() {
     setLetterError("");
@@ -232,12 +232,7 @@ export default function CreatePage() {
       return;
     }
 
-    if (plan === "PREMIUM") {
-      router.push(`/checkout?pageId=${data.id}`);
-      return;
-    }
-
-    router.push(`/sucesso?pageId=${data.id}`);
+    router.push(`/checkout?pageId=${data.id}`);
   }
 
   const startDateObj = startDate ? new Date(`${startDate}T00:00:00`) : null;
@@ -398,7 +393,7 @@ export default function CreatePage() {
           <div className="w-full max-w-full min-w-0 space-y-3 rounded-2xl p-4" style={cardStyle}>
             <p className="text-sm" style={{ color: "#3a2020" }}>
               Fotos e vídeos do casal ({validMedia.length}
-              {plan === "FREE" ? `/${MAX_PHOTOS_FREE}` : ""})
+              {plan === "CLASSIC" ? `/${MAX_PHOTOS_FREE}` : ""})
             </p>
 
             <label
@@ -416,7 +411,7 @@ export default function CreatePage() {
               <span className="text-center">
                 {uploadingPhotos
                   ? "Enviando mídias..."
-                  : plan === "FREE"
+                  : plan === "CLASSIC"
                     ? "📷 Escolher foto ou vídeo da galeria"
                     : "📷 Escolher fotos e vídeos da galeria"}
               </span>
@@ -541,10 +536,10 @@ export default function CreatePage() {
           <div className="grid grid-cols-2 gap-3">
             <button
               type="button"
-              onClick={() => setPlan("FREE")}
+              onClick={() => setPlan("CLASSIC")}
               className="rounded-2xl p-3 text-base font-semibold transition"
               style={
-                plan === "FREE"
+                plan === "CLASSIC"
                   ? { background: "linear-gradient(135deg,#8b1a2a,#6a1525)", color: "#fff", border: "1px solid rgba(139,26,42,0.4)", boxShadow: "0 4px 16px rgba(139,26,42,0.2)" }
                   : { background: "rgba(139,26,42,0.05)", color: "#8b1a2a", border: "1px solid rgba(139,26,42,0.2)" }
               }
