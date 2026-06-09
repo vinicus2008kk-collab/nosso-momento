@@ -1,3 +1,4 @@
+import { KiwifyCheckoutClient } from "@/components/kiwify-checkout-client";
 import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
@@ -13,30 +14,29 @@ export default async function CheckoutPage({
 }) {
   const pageId = searchParams.pageId;
 
-  if (!pageId) {
-    redirect("/criar");
-  }
+  if (!pageId) redirect("/criar");
 
   const page = await prisma.romanticPage.findUnique({
     where: { id: pageId },
   });
 
-  if (!page) {
-    redirect("/criar");
-  }
+  if (!page) redirect("/criar");
 
   const baseCheckoutUrl =
-    page.plan === "PREMIUM"
-      ? KIWIFY_CHECKOUTS.PREMIUM
-      : KIWIFY_CHECKOUTS.CLASSIC;
+    page.plan === "PREMIUM" ? KIWIFY_CHECKOUTS.PREMIUM : KIWIFY_CHECKOUTS.CLASSIC;
 
   const checkoutUrl = new URL(baseCheckoutUrl);
-
   checkoutUrl.searchParams.set("s1", page.id);
   checkoutUrl.searchParams.set("src", page.id);
   checkoutUrl.searchParams.set("utm_source", "surpresadeamor");
   checkoutUrl.searchParams.set("utm_medium", "checkout");
   checkoutUrl.searchParams.set("utm_campaign", page.plan === "PREMIUM" ? "premium" : "classic");
 
-  redirect(checkoutUrl.toString());
+  return (
+    <KiwifyCheckoutClient
+      pageId={page.id}
+      plan={page.plan}
+      checkoutUrl={checkoutUrl.toString()}
+    />
+  );
 }
