@@ -71,17 +71,16 @@ export default function CreatePage() {
     [musicStartMinutes, musicStartSeconds]
   );
   const validMedia = useMemo(() => mediaItems, [mediaItems]);
-  const previewMedia = useMemo(
-    () =>
-      validMedia.length
-        ? validMedia
-        : [
-            { type: "image" as const, url: "https://images.unsplash.com/photo-1494774157365-9e04c6720e47?auto=format&fit=crop&w=700&q=80" },
-            { type: "image" as const, url: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=700&q=80" },
-            { type: "image" as const, url: "https://images.unsplash.com/photo-1529636798458-92182e662485?auto=format&fit=crop&w=700&q=80" }
-          ],
-    [validMedia]
-  );
+  const previewMedia = useMemo(() => {
+    const fallbackMedia = [
+      { type: "image" as const, url: "https://images.unsplash.com/photo-1494774157365-9e04c6720e47?auto=format&fit=crop&w=700&q=80" },
+      { type: "image" as const, url: "https://images.unsplash.com/photo-1524504388940-b1c1722653e1?auto=format&fit=crop&w=700&q=80" },
+      { type: "image" as const, url: "https://images.unsplash.com/photo-1529636798458-92182e662485?auto=format&fit=crop&w=700&q=80" }
+    ];
+
+    const media = validMedia.length ? validMedia : fallbackMedia;
+    return plan === "CLASSIC" ? media.slice(0, MAX_PHOTOS_FREE) : media;
+  }, [validMedia, plan]);
 
   useEffect(() => {
     const interval = setInterval(() => setNow(new Date()), 1000);
@@ -197,7 +196,7 @@ export default function CreatePage() {
     if (!startDate.trim()) { setError("Informe a data de início do relacionamento."); return; }
     if (!message.trim()) { setError("Escreva uma mensagem romântica para a pessoa amada."); return; }
     if (!mediaItems.length) { setError("Adicione pelo menos uma foto ou vídeo do casal."); return; }
-    if (musicUrl.trim() && !getYouTubeVideoId(musicUrl.trim())) {
+    if (plan === "PREMIUM" && musicUrl.trim() && !getYouTubeVideoId(musicUrl.trim())) {
       setError("Informe um link válido do YouTube.");
       return;
     }
@@ -212,9 +211,9 @@ export default function CreatePage() {
       startDate: formData.get("startDate"),
       message: formData.get("message"),
       photos: mediaItems,
-      musicUrl: formData.get("musicUrl") || "",
-      musicStartTime: musicStartTimeTotal,
-      theme: formData.get("theme"),
+      musicUrl: plan === "PREMIUM" ? formData.get("musicUrl") || "" : "",
+      musicStartTime: plan === "PREMIUM" ? musicStartTimeTotal : 0,
+      theme: plan === "PREMIUM" ? formData.get("theme") : "classic",
       slug: formData.get("slug"),
       plan
     };
@@ -252,7 +251,8 @@ export default function CreatePage() {
   const inputStyle = { background: "#fff", color: "#1e0d0d", borderColor: "rgba(139,26,42,0.2)" };
   const labelStyle = { color: "#1e0d0d" };
   const cardStyle = { background: "rgba(139,26,42,0.03)", border: "1px solid rgba(139,26,42,0.1)" };
-  const isChampagne = theme === "champagne";
+  const activeTheme = plan === "PREMIUM" ? theme : "classic";
+  const isChampagne = activeTheme === "champagne";
 
   return (
     <main
@@ -481,6 +481,8 @@ export default function CreatePage() {
             </div>
           </div>
 
+          {plan === "PREMIUM" && (
+            <>
           <label className="block">
             <span className="mb-1 block text-sm font-medium" style={labelStyle}>Link da música no YouTube</span>
             <div className="relative">
@@ -508,7 +510,7 @@ export default function CreatePage() {
                 <option value="champagne">Champagne</option>
               </select>
               <div
-                className={`mt-3 rounded-2xl p-4 text-center bg-gradient-to-br transition-all duration-500 ${themePreviewConfig[theme] ?? themePreviewConfig.classic}`}
+                className={`mt-3 rounded-2xl p-4 text-center bg-gradient-to-br transition-all duration-500 ${themePreviewConfig[activeTheme] ?? themePreviewConfig.classic}`}
                 style={theme === "champagne"
                   ? { border: "1px solid rgba(139,26,42,0.12)", boxShadow: "0 4px 16px rgba(139,26,42,0.07)" }
                   : { border: "1px solid rgba(255,255,255,0.25)" }}
@@ -517,7 +519,7 @@ export default function CreatePage() {
                   Preview do tema
                 </p>
                 <p className="mt-1 text-xl font-bold" style={{ color: theme === "champagne" ? "#1e0d0d" : "#ffffff" }}>
-                  {themeLabel[theme] ?? "Clássico"}
+                  {themeLabel[activeTheme] ?? "Clássico"}
                 </p>
                 <p className="mt-1 text-sm" style={{ color: theme === "champagne" ? "#6b4040" : "rgba(255,255,255,0.8)" }}>
                   Assim ficará a aparência principal da surpresa.
@@ -525,6 +527,9 @@ export default function CreatePage() {
               </div>
             </div>
           </label>
+
+            </>
+          )}
 
           <label className="block">
             <span className="mb-1 block text-sm font-medium" style={labelStyle}>Slug personalizado</span>
@@ -586,7 +591,7 @@ export default function CreatePage() {
           <div className="flex items-center justify-between">
             <p className="text-xs uppercase tracking-[0.2em]" style={{ color: "#6b4040" }}>Preview ao vivo</p>
             <span className="rounded-full px-2 py-0.5 text-xs" style={{ background: "rgba(139,26,42,0.08)", color: "#8b1a2a" }}>
-              {themeLabel[theme] ?? "Clássico"}
+              {themeLabel[activeTheme] ?? "Clássico"}
             </span>
           </div>
           <p className="mt-1 text-sm" style={{ color: "#5a3535" }}>Atualiza automaticamente enquanto voce digita.</p>
@@ -595,7 +600,7 @@ export default function CreatePage() {
             <div className="phone-mockup iphone-shell w-full max-w-[22rem]">
               <div className="phone-notch" />
 
-              <div className={`phone-mockup-screen iphone-screen relative overflow-hidden bg-gradient-to-br transition-all duration-500 ${themePreviewConfig[theme] ?? themePreviewConfig.classic}`}>
+              <div className={`phone-mockup-screen iphone-screen relative overflow-hidden bg-gradient-to-br transition-all duration-500 ${themePreviewConfig[activeTheme] ?? themePreviewConfig.classic}`}>
                 <div className="screen-reflection" />
 
                 <div className="relative z-10 space-y-3">
@@ -660,6 +665,8 @@ export default function CreatePage() {
                     </p>
                   </div>
 
+                  {plan === "PREMIUM" && (
+                    <>
                   {/* Música + QR */}
                   <div className="grid grid-cols-[1fr_auto] gap-2">
                     <div
@@ -696,6 +703,9 @@ export default function CreatePage() {
                       <img src={`https://api.qrserver.com/v1/create-qr-code/?size=116x116&data=${encodeURIComponent(`https://nossomomento.com.br/momento/${slug || "seu-slug"}`)}`} alt="QR Code do momento" className="h-[4.5rem] w-[4.5rem] rounded-lg" />
                     </div>
                   </div>
+
+                    </>
+                  )}
 
                   {/* Link final */}
                   <div
