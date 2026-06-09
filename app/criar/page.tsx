@@ -298,7 +298,7 @@ export default function CreatePage() {
         <p className="text-sm" style={{ color: "#5a3535" }}>💘 Mais de 10.000 surpresas criadas</p>
       </div>
 
-      <div className="relative mx-auto grid w-full max-w-6xl gap-4 md:grid-cols-[1.04fr_0.96fr]">
+      <div className="relative mx-auto grid grid-cols-1 w-full max-w-6xl gap-4 md:grid-cols-[1.04fr_0.96fr]">
         <form
           id="create-form"
           onSubmit={onSubmit}
