@@ -540,7 +540,7 @@ export default function CreatePage() {
                 value={slug}
                 onChange={(e) => {
                   setSlugEditedManually(true);
-                  setSlug(generateSlug(e.target.value));
+                  setSlug(e.target.value);
                 }}
                 required
                 placeholder="Ex: Ana e Lucas"
@@ -711,7 +711,7 @@ export default function CreatePage() {
                         ? { background: "rgba(255,255,255,0.75)", border: "1px solid rgba(139,26,42,0.14)" }
                         : { background: "rgba(255,255,255,0.15)", border: "1px solid rgba(255,255,255,0.25)" }}
                     >
-                      <img src={`https://api.qrserver.com/v1/create-qr-code/?size=116x116&data=${encodeURIComponent(`https://nossomomento.com.br/momento/${slug || "seu-slug"}`)}`} alt="QR Code do momento" className="h-[4.5rem] w-[4.5rem] rounded-lg" />
+                      <img src={`https://api.qrserver.com/v1/create-qr-code/?size=116x116&data=${encodeURIComponent(`https://nossomomento.com.br/momento/${generateSlug(slug) || "seu-slug"}`)}`} alt="QR Code do momento" className="h-[4.5rem] w-[4.5rem] rounded-lg" />
                     </div>
                   </div>
 
@@ -727,7 +727,7 @@ export default function CreatePage() {
                   >
                     <p className="text-[11px]" style={{ color: isChampagne ? "#8b1a2a" : "rgba(255,235,215,0.8)" }}>Link final</p>
                     <p className="truncate text-sm font-semibold" style={{ color: isChampagne ? "#1e0d0d" : "#ffffff" }}>
-                      nossomomento.com.br/momento/{slug || "seu-slug"}
+                      nossomomento.com.br/momento/{generateSlug(slug) || "seu-slug"}
                     </p>
                   </div>
                 </div>
