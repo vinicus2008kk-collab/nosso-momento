@@ -1,26 +1,34 @@
-import { CheckoutClient } from "@/components/checkout-client";
-import { isMercadoPagoConfigured } from "@/lib/mercado-pago-config";
 import { prisma } from "@/lib/prisma";
+import { redirect } from "next/navigation";
+
+const KIWIFY_CHECKOUTS = {
+  CLASSIC: "https://pay.kiwify.com.br/gBkA3ER",
+  PREMIUM: "https://pay.kiwify.com.br/hfX4vfN",
+};
 
 export default async function CheckoutPage({
   searchParams,
 }: {
-  searchParams: { pageId?: string; status?: string };
+  searchParams: { pageId?: string };
 }) {
-  const pageId = searchParams.pageId ?? null;
+  const pageId = searchParams.pageId;
 
-  let plan = "CLASSIC";
-  if (pageId) {
-    const page = await prisma.romanticPage.findUnique({ where: { id: pageId } });
-    plan = page?.plan ?? "CLASSIC";
+  if (!pageId) {
+    redirect("/criar");
   }
 
-  return (
-    <CheckoutClient
-      testMode={!isMercadoPagoConfigured()}
-      pageId={pageId}
-      status={searchParams.status ?? null}
-      plan={plan}
-    />
-  );
+  const page = await prisma.romanticPage.findUnique({
+    where: { id: pageId },
+  });
+
+  if (!page) {
+    redirect("/criar");
+  }
+
+  const checkoutUrl =
+    page.plan === "PREMIUM"
+      ? KIWIFY_CHECKOUTS.PREMIUM
+      : KIWIFY_CHECKOUTS.CLASSIC;
+
+  redirect(checkoutUrl);
 }
