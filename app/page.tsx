@@ -270,7 +270,7 @@ export default function HomePage() {
   Animações especiais
 </li>
             <PrimaryButton href="/criar" className="mt-auto w-full py-4 text-base">
-  Criar versão Clássica ♡
+  Criar versão Clássica por R$ 9,99 ♡
 </PrimaryButton>
           </div>
 
@@ -299,7 +299,7 @@ export default function HomePage() {
               <li className="flex items-center gap-2"><span style={{ color: "#c9a84c" }}>✦</span> Sem marca d&apos;água</li>
             </ul>
             <PrimaryButton href="/criar" className="mt-auto w-full py-4 text-base">
-              Criar experiência Premium ♡
+              Criar experiência Premium por R$ 19,99 ♡
             </PrimaryButton>
           </div>
         </div>
