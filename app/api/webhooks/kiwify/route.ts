@@ -124,7 +124,8 @@ function isApprovedEvent(body: KiwifyPayload) {
     eventName.includes("purchase_approved") ||
     eventName.includes("order_approved") ||
     eventName.includes("paid") ||
-    eventName.includes("approved")
+    eventName.includes("approved") ||
+    eventName.includes("pago")
   );
 }
 
@@ -150,29 +151,30 @@ export async function POST(request: Request) {
     const pageId = getPageId(body);
     const plan = detectPlan(body);
 
-    if (!pageId) {
-      return NextResponse.json(
-        {
-          received: true,
-          error: "Webhook aprovado recebido, mas sem pageId/s1/src.",
-        },
-        { status: 400 }
-      );
+    let page = null;
+
+    if (pageId) {
+      page = await prisma.romanticPage.findUnique({
+        where: { id: String(pageId) },
+      });
     }
 
-    const page = await prisma.romanticPage.findUnique({
-      where: { id: String(pageId) },
-    });
+    if (!page) {
+      page = await prisma.romanticPage.findFirst({
+        where: {
+          paymentStatus: "PENDING",
+        },
+        orderBy: {
+          createdAt: "desc",
+        },
+      });
+    }
 
     if (!page) {
-      return NextResponse.json(
-        {
-          received: true,
-          error: "Surpresa não encontrada para este pageId.",
-          pageId,
-        },
-        { status: 404 }
-      );
+      return NextResponse.json({
+        received: true,
+        warning: "Nenhuma surpresa pendente encontrada para liberar.",
+      });
     }
 
     const finalPlan = plan ?? page.plan;
