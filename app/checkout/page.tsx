@@ -1,10 +1,10 @@
 import { KiwifyCheckoutClient } from "@/components/kiwify-checkout-client";
-import { prisma } from "@/lib/prisma";
+import { prisma } from "@/lib/prisma";const KIWIFY_CHECKOUTS = {
 import { redirect } from "next/navigation";
 
 const KIWIFY_CHECKOUTS = {
-  CLASSIC: "https://pay.kiwify.com.br/gBkA3ER",
-  PREMIUM: "https://pay.kiwify.com.br/hfX4vfN",
+  CLASSIC: "https://pay.kiwify.com.br/gYLOU8o",
+  PREMIUM: "https://pay.kiwify.com.br/Jg2HGut",
 };
 
 export default async function CheckoutPage({
