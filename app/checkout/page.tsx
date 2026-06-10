@@ -1,5 +1,5 @@
 import { KiwifyCheckoutClient } from "@/components/kiwify-checkout-client";
-import { prisma } from "@/lib/prisma";const KIWIFY_CHECKOUTS = {
+import { prisma } from "@/lib/prisma";
 import { redirect } from "next/navigation";
 
 const KIWIFY_CHECKOUTS = {
@@ -26,11 +26,15 @@ export default async function CheckoutPage({
     page.plan === "PREMIUM" ? KIWIFY_CHECKOUTS.PREMIUM : KIWIFY_CHECKOUTS.CLASSIC;
 
   const checkoutUrl = new URL(baseCheckoutUrl);
+
   checkoutUrl.searchParams.set("s1", page.id);
   checkoutUrl.searchParams.set("src", page.id);
   checkoutUrl.searchParams.set("utm_source", "surpresadeamor");
   checkoutUrl.searchParams.set("utm_medium", "checkout");
-  checkoutUrl.searchParams.set("utm_campaign", page.plan === "PREMIUM" ? "premium" : "classic");
+  checkoutUrl.searchParams.set(
+    "utm_campaign",
+    page.plan === "PREMIUM" ? "premium" : "classic"
+  );
 
   return (
     <KiwifyCheckoutClient
