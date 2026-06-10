@@ -49,6 +49,22 @@ export function KiwifyCheckoutClient({ pageId, plan, checkoutUrl }: Props) {
           className="mt-4 block rounded-full border border-white/20 bg-white/10 px-6 py-4 text-base font-semibold text-white"
         >
           Já paguei, acessar minha surpresa
+          {process.env.NODE_ENV !== "production" && (
+  <button
+    onClick={async () => {
+      await fetch("/api/checkout/simulate", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pageId }),
+      });
+
+      window.location.href = `/sucesso?pageId=${pageId}`;
+    }}
+    className="mt-4 w-full rounded-full bg-yellow-400 px-6 py-3 text-sm font-bold text-black"
+  >
+    🛠 Simular pagamento aprovado
+  </button>
+)}
         </a>
 
         <p className="mt-4 text-xs text-cream/50">

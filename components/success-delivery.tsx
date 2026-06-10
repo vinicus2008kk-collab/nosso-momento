@@ -13,11 +13,11 @@ export function SuccessDelivery({ pageId, surpriseUrl }: Props) {
   const [method, setMethod] = useState<DeliveryMethod | null>(null);
   const [contact, setContact] = useState("");
   const [loading, setLoading] = useState(false);
-  const [sent, setSent] = useState(false);
   const [copied, setCopied] = useState(false);
+  const [sent, setSent] = useState(false);
   const [error, setError] = useState("");
 
-  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=600x600&data=${encodeURIComponent(
+  const qrCodeUrl = `https://api.qrserver.com/v1/create-qr-code/?size=700x700&data=${encodeURIComponent(
     surpriseUrl
   )}`;
 
@@ -46,7 +46,7 @@ export function SuccessDelivery({ pageId, surpriseUrl }: Props) {
     if (!method) return;
 
     if (!contact.trim()) {
-      setError(method === "email" ? "Digite o e-mail." : "Digite o número com DDD.");
+      setError(method === "email" ? "Digite seu e-mail." : "Digite o número com DDD.");
       return;
     }
 
@@ -81,7 +81,7 @@ export function SuccessDelivery({ pageId, surpriseUrl }: Props) {
     setLoading(false);
 
     if (!response.ok) {
-      setError(data.error ?? "Não foi possível enviar o e-mail. Tente novamente.");
+      setError(data.error ?? "Não foi possível enviar o e-mail.");
       return;
     }
 
@@ -89,60 +89,75 @@ export function SuccessDelivery({ pageId, surpriseUrl }: Props) {
   }
 
   return (
-    <div className="mt-6 space-y-5">
-      <div className="rounded-2xl border border-white/20 bg-white p-4 text-center">
-        <img
-          src={qrCodeUrl}
-          alt="QR Code da surpresa"
-          className="mx-auto h-56 w-56 rounded-xl"
-        />
+    <div className="mt-8 space-y-5">
+      <div className="rounded-[2rem] border border-white/10 bg-black/20 p-5 shadow-2xl backdrop-blur-xl">
+        <div className="text-center">
+          <p className="text-sm font-semibold text-pink-300">Acesse sua surpresa agora</p>
+          <p className="mt-1 text-xs leading-relaxed text-cream/60">
+            Escaneie o QR Code com a câmera do celular ou copie o link abaixo.
+          </p>
+        </div>
 
-        <div className="mt-4 grid gap-3 sm:grid-cols-2">
+        <div className="mx-auto mt-5 w-fit rounded-2xl bg-white p-3 shadow-xl">
+          <img
+            src={qrCodeUrl}
+            alt="QR Code da surpresa"
+            className="h-52 w-52 rounded-xl"
+          />
+        </div>
+
+        <div className="mt-5 grid gap-3">
           <button
             onClick={copyLink}
-            className="rounded-full bg-blush px-4 py-3 text-sm font-semibold text-white"
+            className="rounded-xl bg-gradient-to-r from-pink-500 to-rose-500 px-5 py-3 text-sm font-bold text-white shadow-lg transition hover:brightness-110"
           >
-            {copied ? "Link copiado!" : "Copiar link"}
+            {copied ? "✅ Link copiado!" : "📋 Copiar link"}
           </button>
+
+          <a
+            href={surpriseUrl}
+            target="_blank"
+            className="rounded-xl bg-black/50 px-5 py-3 text-center text-sm font-bold text-white ring-1 ring-white/10 transition hover:bg-black/70"
+          >
+            🔓 Abrir surpresa agora
+          </a>
 
           <button
             onClick={downloadQrCode}
-            className="rounded-full bg-white/10 px-4 py-3 text-sm font-semibold text-white ring-1 ring-white/20"
+            className="rounded-xl bg-white/10 px-5 py-3 text-sm font-bold text-white ring-1 ring-white/10 transition hover:bg-white/15"
           >
-            Baixar QR Code
+            ⬇️ Baixar QR Code
           </button>
         </div>
-
-        <a
-          href={surpriseUrl}
-          target="_blank"
-          className="mt-3 block rounded-full bg-green-600 px-4 py-3 text-sm font-semibold text-white"
-        >
-          Abrir surpresa
-        </a>
       </div>
 
-      <div className="rounded-2xl border border-white/20 bg-white/10 p-5">
-        <h2 className="text-lg font-semibold text-white">
-          Como você quer receber sua surpresa?
+      <div className="flex items-center gap-3">
+        <div className="h-px flex-1 bg-white/10" />
+        <span className="text-xs uppercase tracking-[0.2em] text-cream/50">ou</span>
+        <div className="h-px flex-1 bg-white/10" />
+      </div>
+
+      <div className="rounded-[2rem] border border-white/10 bg-black/20 p-5 shadow-xl backdrop-blur-xl">
+        <h2 className="text-center text-lg font-bold text-white">
+          Receber por outro canal
         </h2>
 
         {!method && (
           <div className="mt-4 grid grid-cols-2 gap-3">
             <button
               onClick={() => setMethod("email")}
-              className="rounded-2xl border border-white/20 bg-white/10 p-4 text-center"
+              className="rounded-2xl border border-white/10 bg-white/10 p-4 text-center transition hover:bg-white/15"
             >
-              <p className="text-2xl">📧</p>
-              <p className="mt-2 text-sm font-semibold text-white">E-mail</p>
+              <p className="text-2xl">✉️</p>
+              <p className="mt-2 text-sm font-semibold text-white">Receber por e-mail</p>
             </button>
 
             <button
               onClick={() => setMethod("whatsapp")}
-              className="rounded-2xl border border-white/20 bg-white/10 p-4 text-center"
+              className="rounded-2xl border border-white/10 bg-white/10 p-4 text-center transition hover:bg-white/15"
             >
-              <p className="text-2xl">💬</p>
-              <p className="mt-2 text-sm font-semibold text-white">WhatsApp</p>
+              <p className="text-2xl">🟢</p>
+              <p className="mt-2 text-sm font-semibold text-white">Receber no WhatsApp</p>
             </button>
           </div>
         )}
@@ -154,6 +169,7 @@ export function SuccessDelivery({ pageId, surpriseUrl }: Props) {
                 setMethod(null);
                 setContact("");
                 setError("");
+                setSent(false);
               }}
               className="text-xs text-cream/60 underline"
             >
@@ -164,29 +180,13 @@ export function SuccessDelivery({ pageId, surpriseUrl }: Props) {
               type={method === "email" ? "email" : "tel"}
               value={contact}
               onChange={(e) => setContact(e.target.value)}
-              placeholder={
-                method === "email" ? "seuemail@exemplo.com" : "11999999999"
-              }
-              className="w-full rounded-xl border border-white/20 bg-white/10 px-4 py-3 text-white placeholder:text-cream/40"
+              placeholder={method === "email" ? "seuemail@exemplo.com" : "11999999999"}
+              className="w-full rounded-xl border border-white/10 bg-black/30 px-4 py-3 text-white placeholder:text-cream/40 outline-none focus:ring-2 focus:ring-pink-400/40"
             />
 
             {error && (
-              <p className="rounded-lg bg-red-500/20 p-2 text-sm text-red-100">
-                {error}
-              </p>
+              <p className="rounded-lg bg-red-500/20 p-2 text-sm text-red-100">{error}</p>
             )}
-
-            <button
-              onClick={handleConfirm}
-              disabled={loading}
-              className="w-full rounded-full bg-blush py-3 text-sm font-semibold text-white disabled:opacity-60"
-            >
-              {loading
-                ? "Enviando..."
-                : method === "email"
-                ? "Enviar por e-mail"
-                : "Abrir WhatsApp"}
-            </button>
 
             {sent && (
               <p className="rounded-lg bg-green-500/20 p-2 text-center text-sm text-green-100">
@@ -195,8 +195,25 @@ export function SuccessDelivery({ pageId, surpriseUrl }: Props) {
                   : "WhatsApp aberto. É só enviar a mensagem!"}
               </p>
             )}
+
+            <button
+              onClick={handleConfirm}
+              disabled={loading}
+              className="w-full rounded-xl bg-gradient-to-r from-pink-500 to-rose-500 py-3 text-sm font-bold text-white transition hover:brightness-110 disabled:opacity-60"
+            >
+              {loading
+                ? "Enviando..."
+                : method === "email"
+                ? "Enviar por e-mail"
+                : "Abrir WhatsApp"}
+            </button>
           </div>
         )}
+      </div>
+
+      <div className="rounded-2xl border border-white/10 bg-black/20 px-4 py-3">
+        <p className="text-xs text-cream/50">Link da sua surpresa</p>
+        <p className="mt-1 break-all text-sm font-medium text-pink-200">{surpriseUrl}</p>
       </div>
     </div>
   );

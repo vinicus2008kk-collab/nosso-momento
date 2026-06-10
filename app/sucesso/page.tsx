@@ -59,11 +59,26 @@ export default async function SuccessPage({
         </div>
 
         <SuccessDelivery pageId={pageId} surpriseUrl={surpriseUrl} />
+        {process.env.NODE_ENV !== "production" && (
+  <form
+    action={async () => {
+      "use server";
 
-        <div className="mt-6 rounded-xl border border-white/10 bg-white/5 px-4 py-3">
-          <p className="text-xs text-cream/50">Link da surpresa</p>
-          <p className="mt-0.5 break-all text-sm font-medium text-white">{surpriseUrl}</p>
-        </div>
+      await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}/api/checkout/simulate`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ pageId }),
+      });
+    }}
+  >
+    <button
+      type="submit"
+      className="fixed bottom-4 right-4 z-50 rounded-full bg-yellow-500 px-4 py-2 text-xs font-bold text-black shadow-lg"
+    >
+      🛠 Simular pagamento aprovado
+    </button>
+  </form>
+)}
       </div>
     </main>
   );
