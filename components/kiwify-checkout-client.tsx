@@ -9,7 +9,7 @@ type Props = {
 };
 
 export function KiwifyCheckoutClient({ pageId, plan, checkoutUrl }: Props) {
-  const [checking, setChecking] = useState(true);
+  const [checking] = useState(true);
 
   const planLabel = plan === "PREMIUM" ? "Premium" : "Clássico";
   const price = plan === "PREMIUM" ? "R$ 19,99" : "R$ 9,99";
