@@ -1,4 +1,11 @@
+```tsx
 "use client";
+
+declare global {
+  interface Window {
+    fbq?: (...args: any[]) => void;
+  }
+}
 
 type Props = {
   pageId: string;
@@ -6,7 +13,11 @@ type Props = {
   checkoutUrl: string;
 };
 
-export function KiwifyCheckoutClient({ pageId, plan, checkoutUrl }: Props) {
+export function KiwifyCheckoutClient({
+  pageId,
+  plan,
+  checkoutUrl,
+}: Props) {
   const planLabel = plan === "PREMIUM" ? "Premium" : "Clássico";
   const price = plan === "PREMIUM" ? "R$ 19,99" : "R$ 9,99";
 
@@ -16,6 +27,16 @@ export function KiwifyCheckoutClient({ pageId, plan, checkoutUrl }: Props) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ pageId }),
     });
+  }
+
+  function handleCheckoutClick() {
+    if (typeof window !== "undefined" && window.fbq) {
+      window.fbq("track", "InitiateCheckout", {
+        content_name: `Plano ${planLabel}`,
+        currency: "BRL",
+        value: plan === "PREMIUM" ? 19.99 : 9.99,
+      });
+    }
   }
 
   return (
@@ -53,6 +74,7 @@ export function KiwifyCheckoutClient({ pageId, plan, checkoutUrl }: Props) {
           href={checkoutUrl}
           target="_blank"
           rel="noopener noreferrer"
+          onClick={handleCheckoutClick}
           className="mt-6 block rounded-full bg-blush px-6 py-4 text-base font-bold text-white transition hover:brightness-110"
         >
           Abrir checkout seguro
@@ -72,6 +94,7 @@ export function KiwifyCheckoutClient({ pageId, plan, checkoutUrl }: Props) {
               Aguardando confirmação automática...
             </p>
           </div>
+
           <p className="mt-2 text-xs text-cream/50">
             Após o pagamento, volte para esta aba. Assim que a confirmação chegar,
             você será levado para o QR Code automaticamente.
@@ -90,3 +113,4 @@ export function KiwifyCheckoutClient({ pageId, plan, checkoutUrl }: Props) {
     </main>
   );
 }
+```
