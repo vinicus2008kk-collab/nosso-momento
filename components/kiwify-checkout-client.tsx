@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
 type Props = {
   pageId: string;
   plan: string;
@@ -9,18 +7,8 @@ type Props = {
 };
 
 export function KiwifyCheckoutClient({ pageId, plan, checkoutUrl }: Props) {
-  const [checking] = useState(true);
-
   const planLabel = plan === "PREMIUM" ? "Premium" : "Clássico";
   const price = plan === "PREMIUM" ? "R$ 19,99" : "R$ 9,99";
-
-  useEffect(() => {
-    const interval = setInterval(() => {
-      window.location.href = `/sucesso?pageId=${pageId}`;
-    }, 3000);
-
-    return () => clearInterval(interval);
-  }, [pageId]);
 
   async function simulatePayment() {
     await fetch("/api/checkout/simulate", {
@@ -28,8 +16,6 @@ export function KiwifyCheckoutClient({ pageId, plan, checkoutUrl }: Props) {
       headers: { "Content-Type": "application/json" },
       body: JSON.stringify({ pageId }),
     });
-
-    window.location.href = `/sucesso?pageId=${pageId}`;
   }
 
   return (
@@ -83,9 +69,7 @@ export function KiwifyCheckoutClient({ pageId, plan, checkoutUrl }: Props) {
           <div className="flex items-center justify-center gap-3">
             <div className="h-5 w-5 animate-spin rounded-full border-2 border-white/20 border-t-white" />
             <p className="text-sm text-cream/80">
-              {checking
-                ? "Aguardando confirmação automática..."
-                : "Verificando pagamento..."}
+              Aguardando confirmação automática...
             </p>
           </div>
           <p className="mt-2 text-xs text-cream/50">
